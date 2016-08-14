@@ -8,6 +8,11 @@ Bundler.require(*Rails.groups)
 
 module WardenAuth
   class Application < Rails::Application
+    config.middleware.insert_after ActionDispatch::Flash, Warden::Manager do |manager|
+      manager.default_strategies :basic_auth
+      manager.failure_app = UnauthorizedController
+      # manager.failure_app = UnauthorizedController
+    end
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
